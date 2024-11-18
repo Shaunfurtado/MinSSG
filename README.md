@@ -1,6 +1,8 @@
 # MinSSG
 
-MinSSG is an online static code-sharing platform that allows users to showcase project structures directly from a markdown file. With this tool, you can present your project’s folder structure, code snippets, and individual files in an interactive, static format. 
+MinSSG is an online static code-sharing platform that allows users to showcase project structures directly from a markdown file. With this tool, you can present your project’s folder structure, code snippets, and individual files in an interactive, static format.
+
+[Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md)
 
 ## Features
 - Display project structure with tree view.
@@ -23,6 +25,9 @@ To use MinSSG for displaying your project structure and code, follow these steps
 3. **Use MinSSG to Display Your Project:**
     - Visit the MinSSG viewer at:  
       [MinSSG Viewer](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=<your-raw-url-here>)
+      ```url
+      https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=<your-raw-url-here>
+      ```
 
     - Replace `<your-raw-url-here>` with the raw URL of your markdown file. For example, if you’re using the Gist link, it would look like this:
       ```url
