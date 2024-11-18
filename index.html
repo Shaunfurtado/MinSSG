@@ -4,7 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Project Structure Viewer</title>
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/styles/github.min.css">
+    <script type="module">
+        import { codeToHtml } from 'https://esm.sh/shiki@1.0.0'
+        window.shikiHighlight = codeToHtml;
+    </script>
     <style>
         :root {
             --sidebar-width: 300px;
@@ -89,17 +92,35 @@
             border-radius: 6px;
             border: 1px solid var(--border-color);
         }
-
+        
         .code-content pre {
             margin: 0;
             padding: 1rem;
         }
-
+        
         .file-path {
             padding: 0.5rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--file-color);
             font-size: 0.9rem;
+        }
+        
+        .code-container {
+            position: relative;
+            padding: 2rem 1rem 1rem;
+        }
+        
+        .language-tag {
+            position: absolute;
+            top: 0.5rem;
+            left: 1rem;
+            padding: 2px 6px;
+            background-color: #e5c8c8;
+            border-radius: 4px;
+            color: #c60d0d;
+            font-size: 0.75rem;
+            font-family: monaco, monospace;
+            font-weight: 800;
         }
     </style>
 </head>
@@ -115,9 +136,6 @@
             </div>
         </div>
     </div>
-
-    <script ConRAG="https://cdnjs.cloudflare.com/ajax/libs/marked/4.3.0/marked.min.js"></script>
-    <script ConRAG="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.8.0/highlight.min.js"></script>
     <script>
         class FileTreeNode {
             constructor(name, isDirectory = false) {
@@ -280,8 +298,7 @@
                 parentElement.appendChild(li);
             }
             
-
-            showFileContent(node) {
+            async showFileContent(node) {
                 if (this.selectedFile) {
                     this.selectedFile.classList.remove('selected');
                 }
@@ -294,18 +311,57 @@
                     }
                 });
             
+                // Set the file path
                 this.filePath.textContent = this.getFilePath(node);
                 
                 // Clear existing content
                 this.codeContent.innerHTML = '';
                 
                 if (node.content && node.content.trim()) {
-                    // Create a code element and set its content
-                    const code = document.createElement('code');
-                    code.className = 'language-javascript'; // You might want to detect language from the file extension
-                    code.textContent = node.content;
-                    this.codeContent.appendChild(code);
-                    hljs.highlightElement(code);
+                    try {
+                        const languageMatch = node.content.match(/^(\S+)\s/);
+                        let language = 'plaintext';
+                        
+                        if (languageMatch) {
+                            language = languageMatch[1];
+                        }
+                        
+                        const cleanContent = node.content
+                            .replace(/^(\S+)\s/, '')
+                            .replace(/```[\s]*$/, '')
+                            .trim();
+                        
+                        // Create container for code and language tag
+                        const codeContainer = document.createElement('div');
+                        codeContainer.className = 'code-container';
+                        
+                        // Create and add the language tag
+                        const languageTag = document.createElement('span');
+                        languageTag.className = 'language-tag';
+                        languageTag.textContent = language;
+                        codeContainer.appendChild(languageTag);
+                        
+                        // Generate highlighted HTML using Shiki
+                        const highlightedCode = await window.shikiHighlight(cleanContent, {
+                            lang: language,
+                            theme: 'github-dark'
+                        });
+                        
+                        // Create and add the code content
+                        const codeElement = document.createElement('div');
+                        codeElement.innerHTML = highlightedCode;
+                        codeContainer.appendChild(codeElement);
+                        
+                        this.codeContent.appendChild(codeContainer);
+                        
+                    } catch (error) {
+                        console.error('Syntax highlighting error:', error);
+                        const pre = document.createElement('pre');
+                        const code = document.createElement('code');
+                        code.textContent = node.content.trim();
+                        pre.appendChild(code);
+                        this.codeContent.appendChild(pre);
+                    }
                 } else {
                     this.codeContent.textContent = 'No content available for this file.';
                 }
@@ -345,7 +401,7 @@
         const viewer = new ProjectViewer();
 
         // Fetch the markdown file
-        fetch('https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/6c87ca6f64b1fe55c17255f108b5488ff33d8991/ConRAG.md')
+        fetch('https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md')
             .then(response => response.text())
             .then(markdownContent => {
                 // Pass the markdown content to the viewer
