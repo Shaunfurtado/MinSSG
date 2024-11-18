@@ -400,16 +400,18 @@
         // Initialize the viewer
         const viewer = new ProjectViewer();
 
-        // Fetch the markdown file
-        fetch('https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md')
-            .then(response => response.text())
-            .then(markdownContent => {
-                // Pass the markdown content to the viewer
-                viewer.parseMarkdown(markdownContent);
-            })
-            .catch(error => {
-                console.error('Error fetching markdown file:', error);
-            });
+        // Function to fetch the markdown file by URL
+function loadMarkdownFile(fileUrl) {
+    fetch(fileUrl)
+        .then(response => response.text())
+        .then(markdownContent => {
+            // Pass the markdown content to the viewer
+            viewer.parseMarkdown(markdownContent);
+        })
+        .catch(error => {
+            console.error('Error fetching markdown file:', error);
+        });
+}
     </script>
 </body>
 </html>
