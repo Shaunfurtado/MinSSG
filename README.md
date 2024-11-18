@@ -7,22 +7,51 @@ MinSSG is an online static code-sharing platform that allows users to showcase p
 - Render code files from markdown with appropriate syntax highlighting.
 - Easy-to-use markdown template to get started.
 
-## Usage Instructions
+## Usage Instructions for MinSSG
 
-1. Clone the repository:
-    ```bash
-    git clone <repository_url>
-    cd MinSSG
-    ```
-2. Install the required dependencies:
-    ```bash
-    npm install
-    ```
-3. Run the application:
-    ```bash
-    npm start
-    ```
-4. To use MinSSG, create or modify the markdown file to include your project’s structure and code snippets. See the template below for an example.
+To use MinSSG for displaying your project structure and code, follow these steps:
+
+1. **Prepare Your Markdown File:**
+    - Create a markdown file with your project structure and code snippets. You can use the [example template](#writing-the-markdown) for guidance.
+   
+2. **Host Your Markdown File:**
+    - Upload your markdown file to a pastebin or gist service that provides a raw URL. Here are some options:
+        - **[GitHub Gist](https://gist.github.com/)**: Create a gist with your markdown content and copy the raw URL.
+        - **[Rentry.co](https://rentry.co/)**: Paste your markdown into Rentry.co and get the raw URL.
+        - Any other pastebin-like service that allows fetching a raw URL of your content.
+   
+3. **Use MinSSG to Display Your Project:**
+    - Visit the MinSSG viewer at:  
+      [MinSSG Viewer](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=<your-raw-url-here>)
+
+    - Replace `<your-raw-url-here>` with the raw URL of your markdown file. For example, if you’re using the Gist link, it would look like this:
+      ```url
+      https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md
+      ```
+
+		[Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md)
+
+4. **View Your Project Structure:**
+    - Once you paste the URL in your browser and load the page, MinSSG will display your project structure and code files as defined in your markdown.
+
+---
+
+### Example URL Usage
+
+Here’s an example of a complete URL to use in your browser to load a markdown file:
+
+```url
+https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md
+```
+
+This will load the markdown file from the provided Gist URL and display it using MinSSG.
+
+---
+
+### Notes:
+- Make sure the URL you use is the **raw** version of the file. If you're using Gist, click on the “Raw” button to get the correct URL.
+- The URL parameter `fileUrl` must point to the raw content of your markdown file.
+
 
 ## Project Structure
 
