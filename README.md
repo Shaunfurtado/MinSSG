@@ -2,7 +2,7 @@
 
 MinSSG is an online static code-sharing platform that allows users to showcase project structures directly from a markdown file. With this tool, you can present your project’s folder structure, code snippets, and individual files in an interactive, static format.
 
-[Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md)
+[Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/38a03779e5daa0efd0bd8512ad756813483a72a2/ConRAG.md)
 
 ## Features
 - Display project structure with tree view.
@@ -34,7 +34,7 @@ To use MinSSG for displaying your project structure and code, follow these steps
       https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md
       ```
 
-		[Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md)
+		[Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/38a03779e5daa0efd0bd8512ad756813483a72a2/ConRAG.md)
 
 4. **View Your Project Structure:**
     - Once you paste the URL in your browser and load the page, MinSSG will display your project structure and code files as defined in your markdown.
@@ -46,7 +46,7 @@ To use MinSSG for displaying your project structure and code, follow these steps
 Here’s an example of a complete URL to use in your browser to load a markdown file:
 
 ```url
-https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/95f671db6442df4a5663ad2e06f4738c2baa2369/ConRAG.md
+https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/38a03779e5daa0efd0bd8512ad756813483a72a2/ConRAG.md
 ```
 
 This will load the markdown file from the provided Gist URL and display it using MinSSG.
