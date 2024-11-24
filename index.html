@@ -16,51 +16,52 @@
             --folder-color: #54aeff;
             --file-color: #57606a;
         }
-
+    
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-
+    
         body {
             font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Helvetica, Arial, sans-serif;
             line-height: 1.5;
             height: 100vh;
             overflow: hidden;
         }
-
+    
         .container {
             display: flex;
             height: 100vh;
+            flex-direction: row;
         }
-
+    
         .sidebar {
             width: var(--sidebar-width);
             border-right: 1px solid var(--border-color);
             overflow-y: auto;
             padding: 1rem;
         }
-
+    
         .main-content {
             flex: 1;
             overflow-y: auto;
             padding: 1rem;
         }
-
+    
         .file-tree {
             list-style: none;
         }
-
+    
         .file-tree ul {
             list-style: none;
             margin-left: 1.5rem;
         }
-
+    
         .file-tree li {
             padding: 0.25rem 0;
         }
-
+    
         .file-item {
             display: flex;
             align-items: center;
@@ -69,47 +70,53 @@
             cursor: pointer;
             color: var(--file-color);
         }
-
+    
         .file-item:hover {
             background-color: var(--hover-bg);
         }
-
+    
         .file-item.selected {
             background-color: var(--hover-bg);
             font-weight: 500;
         }
-
-        .folder-icon, .file-icon {
+    
+        .folder-icon,
+        .file-icon {
             margin-right: 0.5rem;
         }
-
+    
         .folder-icon {
             color: var(--folder-color);
         }
-
+    
         .code-content {
             background-color: #fff;
             border-radius: 6px;
             border: 1px solid var(--border-color);
+            overflow: hidden;
         }
-        
+    
         .code-content pre {
             margin: 0;
             padding: 1rem;
+            white-space: pre-wrap;
+            word-wrap: break-word;
+            overflow-x: auto;
         }
-        
+    
         .file-path {
             padding: 0.5rem;
             border-bottom: 1px solid var(--border-color);
             color: var(--file-color);
             font-size: 0.9rem;
+            background-color: #f6f8fa;
         }
-        
+    
         .code-container {
             position: relative;
             padding: 2rem 1rem 1rem;
         }
-        
+    
         .language-tag {
             position: absolute;
             top: 0.5rem;
@@ -122,7 +129,29 @@
             font-family: monaco, monospace;
             font-weight: 800;
         }
-    </style>
+    
+        /* Mobile Styles */
+        @media (max-width: 768px) {
+            :root {
+                --sidebar-width: 100%;
+            }
+    
+            .container {
+                flex-direction: column;
+            }
+    
+            .sidebar {
+                width: 100%;
+                height: auto;
+                border-right: none;
+                border-bottom: 1px solid var(--border-color);
+            }
+    
+            .main-content {
+                padding: 0.5rem;
+            }
+        }
+    </style>    
 </head>
 <body>
     <div class="container">
