@@ -296,6 +296,74 @@
                 font-size: 0.7rem;
             }
         }
+        .button-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 1000;
+          }
+          
+          #starButton {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background-color: black;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            font-size: 0.875rem;
+            font-weight: 500;
+            padding: 10px 16px;
+            cursor: pointer;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+          }
+          
+          
+          #starButton .shine {
+            position: absolute;
+            right: 0;
+            top: -50%;
+            width: 50px;
+            height: 200%;
+            background: white;
+            opacity: 0.1;
+            transform: translateX(200%) rotate(45deg);
+            transition: transform 1s ease;
+          }
+          
+          #starButton:hover .shine {
+            transform: translateX(-300%) rotate(45deg);
+          }
+          
+          #starButton .button-content {
+            display: flex;
+            align-items: center;
+          }
+          
+          #starButton .label {
+            margin-left: 8px;
+          }
+          
+          #starButton .count {
+            margin-left: 8px;
+            display: flex;
+            align-items: center;
+            font-size: 0.875rem;
+            font-weight: 500;
+          }
+          
+          .star-icon {
+            transition: fill 0.3s ease, filter 0.3s ease;
+            fill: white;
+          }
+          
+          #starButton:hover .star-icon {
+            fill: yellow;
+            filter: drop-shadow(0 0 4px yellow);
+          }
     </style>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Z3M91PDZ2Y"></script>
 <script>
@@ -325,6 +393,26 @@
                 <pre><code id="codeContent">Select a file to view its contents</code></pre>
             </div>
         </div>
+        <div class="button-container">
+            <button id="starButton" onclick="window.open('https://github.com/Shaunfurtado/MinSSG', '_blank');">
+              <span class="shine"></span>
+              <div class="button-content">
+                <svg
+                  class="star-icon"
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="currentColor"
+                  viewBox="0 0 24 24"
+                  width="20"
+                  height="20"
+                >
+                  <path d="M12 2.5l2.09 6.45h6.78l-5.49 3.99 2.09 6.45L12 15.39l-5.47 3.99 2.09-6.45-5.49-3.99h6.78L12 2.5z" />
+                </svg>
+                <span class="label">Star on GitHub</span>
+              </div>
+              <div class="count">
+              </div>
+            </button>
+          </div>
     </div>
     <script>
         function toggleSidebar() {
