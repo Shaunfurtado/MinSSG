@@ -8,6 +8,7 @@
         import { codeToHtml } from 'https://esm.sh/shiki@1.0.0'
         window.shikiHighlight = codeToHtml;
     </script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <style>
         :root {
             --sidebar-width: 300px;
@@ -15,6 +16,30 @@
             --hover-bg: #f6f8fa;
             --folder-color: #54aeff;
             --file-color: #57606a;
+        }
+        /* Modern Scrollbar */
+        .sidebar::-webkit-scrollbar,
+        .main-content::-webkit-scrollbar {
+            width: 8px;
+            height: 8px;
+        }
+
+        .sidebar::-webkit-scrollbar-thumb,
+        .main-content::-webkit-scrollbar-thumb {
+            background-color: #c0c4cc;
+            border-radius: 4px;
+            border: 2px solid transparent; /* Optional for padding effect */
+        }
+
+        .sidebar::-webkit-scrollbar-thumb:hover,
+        .main-content::-webkit-scrollbar-thumb:hover {
+            background-color: #8c8f99;
+        }
+
+        .sidebar::-webkit-scrollbar-track,
+        .main-content::-webkit-scrollbar-track {
+            background-color: #f5f5f5;
+            border-radius: 4px;
         }
     
         * {
@@ -49,46 +74,92 @@
             padding: 1rem;
         }
     
+        /* Updated File Tree */
         .file-tree {
             list-style: none;
+            margin: 0;
+            padding: 0;
+            font-size: 0.875rem;
+            color: var(--file-color);
+            font-family: Consolas, 'Courier New', monospace;
         }
-    
+
         .file-tree ul {
             list-style: none;
-            margin-left: 1.5rem;
+            margin: 0;
+            padding-left: 1rem; /* Align nested items with hierarchy */
+            border-left: 1px solid rgba(200, 200, 200, 0.4); /* Subtle divider for nesting */
         }
-    
+
         .file-tree li {
-            padding: 0.25rem 0;
+            position: relative;
         }
-    
+
         .file-item {
             display: flex;
             align-items: center;
-            padding: 0.25rem 0.5rem;
+            padding: 4px 8px;
             border-radius: 4px;
+            transition: background-color 0.2s ease, color 0.2s ease;
             cursor: pointer;
-            color: var(--file-color);
         }
-    
+
         .file-item:hover {
-            background-color: var(--hover-bg);
+            background-color: rgba(0, 120, 215, 0.1); /* Subtle hover effect */
+            color: #0366d6; /* Highlight text on hover */
         }
-    
+
         .file-item.selected {
-            background-color: var(--hover-bg);
-            font-weight: 500;
+            background-color: #0078d7;
+            color: white;
+            font-weight: bold;
         }
-    
+
         .folder-icon,
         .file-icon {
+            font-size: 1rem;
             margin-right: 0.5rem;
-        }
-    
-        .folder-icon {
             color: var(--folder-color);
         }
-    
+
+        /* Folder-specific styles */
+        .folder-icon {
+            transition: transform 0.2s ease;
+        }
+
+        .file-item.expanded > .folder-icon {
+            transform: rotate(90deg); /* Rotate arrow on expand */
+        }
+
+        /* File and folder names */
+        .file-item span {
+            overflow: hidden;
+            text-overflow: ellipsis;
+            white-space: nowrap;
+        }
+
+        /* Focus outline for accessibility */
+        .file-item:focus {
+            outline: 2px solid rgba(0, 120, 215, 0.5);
+            outline-offset: 2px;
+        }
+
+        /* Subtle divider for nested groups */
+        .file-tree ul:before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            bottom: 0;
+            width: 1px;
+            background-color: rgba(200, 200, 200, 0.4);
+        }
+
+        /* Hide vertical lines for root-level items */
+        .file-tree > ul:before {
+            display: none;
+        }
+
         .code-content {
             background-color: #fff;
             border-radius: 6px;
@@ -128,25 +199,53 @@
             position: static;
         }
     
-        /* Mobile Styles */
         @media (max-width: 768px) {
             :root {
                 --sidebar-width: 100%;
             }
-    
+        
             .container {
                 flex-direction: column;
             }
-    
+        
             .sidebar {
                 width: 100%;
                 height: auto;
+                display: none; /* Hidden by default on mobile */
                 border-right: none;
                 border-bottom: 1px solid var(--border-color);
             }
-    
+        
+            .sidebar.active {
+                display: block; /* Show sidebar when toggled */
+            }
+        
             .main-content {
                 padding: 0.5rem;
+            }
+        
+            .toggle-sidebar {
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                padding: 0.5rem;
+                background-color: var(--hover-bg);
+                border-bottom: 1px solid var(--border-color);
+                cursor: pointer;
+            }
+        
+            .toggle-sidebar span {
+                font-size: 1rem;
+                color: var(--file-color);
+            }
+        }
+        @media (min-width: 769px) {
+            .toggle-sidebar {
+                display: none;
+            }
+        
+            .sidebar {
+                display: block; /* Sidebar always visible on larger screens */
             }
         }
         .code-header {
@@ -201,9 +300,17 @@
 </head>
 <body>
     <div class="container">
+        <!-- Toggle Button for Mobile -->
+        <div class="toggle-sidebar" onclick="toggleSidebar()">
+            <span>☰ File Explorer</span>
+        </div>
+
+        <!-- Sidebar -->
         <div class="sidebar">
             <ul class="file-tree" id="fileTree"></ul>
         </div>
+
+        <!-- Main Content -->
         <div class="main-content">
             <div class="code-content">
                 <div class="file-path" id="filePath"></div>
@@ -212,6 +319,19 @@
         </div>
     </div>
     <script>
+        function toggleSidebar() {
+            const sidebar = document.querySelector('.sidebar');
+            sidebar.classList.toggle('active');
+        }
+    
+        // Collapse sidebar when an item is selected
+        document.querySelector('.file-tree').addEventListener('click', () => {
+            const sidebar = document.querySelector('.sidebar');
+            if (window.innerWidth <= 768) { // Only collapse on smaller screens
+                sidebar.classList.remove('active');
+            }
+        });
+        
         class FileTreeNode {
             constructor(name, isDirectory = false) {
                 this.name = name;
@@ -345,14 +465,16 @@
                 const li = document.createElement('li');
                 const div = document.createElement('div');
                 div.className = 'file-item';
-                
+            
                 const icon = document.createElement('span');
                 icon.className = node.isDirectory ? 'folder-icon' : 'file-icon';
-                icon.innerHTML = node.isDirectory ? '📁' : '📄';
-                
+            
+                // Using more expressive icons for files and folders
+                icon.innerHTML = node.isDirectory ? '📂' : this.getFileIcon(node.name);
+            
                 const name = document.createElement('span');
                 name.textContent = node.name;
-                
+            
                 div.appendChild(icon);
                 div.appendChild(name);
                 li.appendChild(div);
@@ -372,6 +494,50 @@
             
                 parentElement.appendChild(li);
             }
+            
+            getFileIcon(fileName) {
+                const extension = fileName.split('.').pop().toLowerCase();
+                const icons = {
+                    js: '<i class="bi bi-filetype-js"></i>',         // JavaScript
+                    ts: '<svg xmlns="http://www.w3.org/2000/svg" x="0px" y="0px" width="16" height="16" viewBox="0 0 24 24"><path d="M 3 3 L 3 4 L 3 21 L 21 21 L 21 3 L 3 3 z M 5 5 L 19 5 L 19 19 L 5 19 L 5 5 z M 7 10 L 7 11.451172 L 9.0742188 11.451172 L 9.0742188 18 L 10.78125 18 L 10.78125 11.451172 L 12.898438 11.451172 L 12.898438 10 L 7 10 z M 15.554688 10.019531 C 14.370437 10.105906 13.1875 10.601688 13.1875 12.242188 C 13.1875 14.655188 16.4375 14.654187 16.4375 15.742188 C 16.4375 15.845187 16.482937 16.595703 15.335938 16.595703 C 14.188937 16.595703 13.230469 15.875 13.230469 15.875 L 13.230469 17.626953 C 13.230469 17.626953 18.232422 19.243703 18.232422 15.595703 C 18.232422 13.226703 14.951172 13.344969 14.951172 12.167969 C 14.951172 11.711969 15.276828 11.285156 16.173828 11.285156 C 17.070828 11.285156 17.865234 11.814453 17.865234 11.814453 L 17.923828 10.255859 C 17.923828 10.255859 16.738937 9.9331563 15.554688 10.019531 z"></path></svg>',         // TypeScript
+                    html: '<i class="bi bi-filetype-html"></i>',   // HTML
+                    css: '<i class="bi bi-filetype-css"></i>',        // CSS
+                    scss: '<i class="bi bi-filetype-scss"></i>',       // SCSS
+                    md: '<i class="bi bi-journal-text"></i>',                   // Markdown
+                    jsx: '<i class="bi bi-filetype-jsx"></i>',                  // JSX
+                    tsx: '<i class="bi bi-filetype-tsx"></i>',                  // TSX
+                    json: '<i class="bi bi-filetype-json"></i>',     // JSON
+                    txt: '<i class="bi bi-file-earmark-text"></i>',             // Text
+                    py: '<i class="bi bi-filetype-py"></i>',         // Python
+                    java: '<i class="bi bi-filetype-jsbi bi-filetype-java"></i>',       // Java
+                    cpp: '<i class="bi bi-filetype-jsbi bi-filetype-cpp"></i>',        // C++
+                    c: '<i class="bi bi-filetype-jsbi bi-filetype-c"></i>',          // C
+                    cs: '<i class="bi bi-filetype-jsbi bi-filetype-cs"></i>',         // C#
+                    rb: '<i class="bi bi-filetype-jsbi bi-filetype-rb"></i>',         // Ruby
+                    php: '<i class="bi bi-filetype-jsbi bi-filetype-php"></i>',        // PHP
+                    go: '<i class="bi bi-filetype-jsbi bi-filetype-go"></i>',         // Go
+                    rs: '<i class="bi bi-filetype-jsbi bi-filetype-rs"></i>',         // Rust
+                    swift: '<i class="bi bi-filetype-jsbi bi-filetype-switft"></i>',      // Swift
+                    kt: '<i class="bi bi-filetype-jsbi bi-filetype-kt"></i>',         // Kotlin
+                    dart: '<i class="bi bi-filetype-jsbi bi-filetype-dart"></i>',       // Dart
+                    sql: '<i class="bi bi-filetype-jsbi bi-filetype-sql"></i>',        // SQL
+                    yaml: '<i class="bi bi-file-earmark-binary"></i>',          // YAML
+                    xml: '<i class="bi bi-filetype-xml"></i>',         // XML
+                    sh: '<i class="bi bi-filetype-sh"></i>',              // Shell Script
+                    bash: '<i class="bi bi-filetype-bash"></i>',            // Bash Script
+                    dockerfile: '<i class="bi bi-file-earmark-text"></i>',      // Dockerfile
+                    config: '<i class="bi bi-gear-fill"></i>',                  // Configuration
+                    env: '<i class="bi bi-gear-fill"></i>',                     // Environment Files
+                    log: '<i class="bi bi-journal"></i>',                       // Log Files
+                    doc: '<i class="bi bi-file-earmark-word-fill"></i>',        // Word
+                    docx: '<i class="bi bi-file-earmark-word-fill"></i>',       // Word
+                    xls: '<i class="bi bi-file-earmark-spreadsheet-fill"></i>', // Excel
+                    xlsx: '<i class="bi bi-file-earmark-spreadsheet-fill"></i>',// Excel
+                    default: '<i class="bi bi-file-earmark"></i>'               // Default Icon
+                };                
+                return icons[extension] || icons.default;
+            }
+            
             
             async showFileContent(node) {
                 if (this.selectedFile) {

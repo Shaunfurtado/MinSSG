@@ -1,5 +1,5 @@
 # MinSSG
-
+![img](https://i.imgur.com/0QoQz5z.png)
 MinSSG is an online static code-sharing platform that allows users to showcase project structures directly from a markdown file. With this tool, you can present your project’s folder structure, code snippets, and individual files in an interactive, static format.
 
 [Live Link Demo](https://shaunfurtado.is-a.dev/MinSSG/?fileUrl=https://gist.githubusercontent.com/Shaunfurtado/2036bc36cf9d86fdbf680a69ae3f8d8d/raw/38a03779e5daa0efd0bd8512ad756813483a72a2/ConRAG.md)
