@@ -19,8 +19,7 @@ To use MinSSG for displaying your project structure and code, follow these steps
 2. **Host Your Markdown File:**
     - Upload your markdown file to a pastebin or gist service that provides a raw URL. Here are some options:
         - **[GitHub Gist](https://gist.github.com/)**: Create a gist with your markdown content and copy the raw URL.
-        - **[Rentry.co](https://rentry.co/)**: Paste your markdown into Rentry.co and get the raw URL.
-        - Any other pastebin-like service that allows fetching a raw URL of your content.
+        - Any other pastebin-like service that allows fetching a raw URL of your markdown content.
    
 3. **Use MinSSG to Display Your Project:**
     - Visit the MinSSG viewer at:  
