@@ -777,15 +777,40 @@
 
         // Function to fetch the markdown file by URL
         function loadMarkdownFile(fileUrl) {
-            fetch(fileUrl)
-                .then(response => response.text())
-                .then(markdownContent => {
-                    // Pass the markdown content to the viewer
+            fetch(fileUrl, {
+                // Add headers to handle different content types
+                headers: {
+                    'Accept': 'text/markdown, text/plain, */*'
+                }
+            })
+            .then(response => {
+                // Check if the response is successful
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                // Try to get content type
+                const contentType = response.headers.get('content-type') || '';
+                // Check if content is markdown or plain text
+                if (contentType.includes('text/markdown') || 
+                    contentType.includes('text/plain') || 
+                    contentType.includes('application/text')) {
+                    return response.text();
+                }
+                // If content type doesn't match, try to parse as text
+                return response.text();
+            })
+            .then(markdownContent => {
+                // Basic validation to ensure it looks like markdown
+                if (markdownContent.trim().length > 10) {
                     viewer.parseMarkdown(markdownContent);
-                })
-                .catch(error => {
-                    console.error('Error fetching markdown file:', error);
-                });
+                } else {
+                    throw new Error('Content does not appear to be valid markdown');
+                }
+            })
+            .catch(error => {
+                console.error('Error fetching markdown file:', error);
+                alert(`Failed to load markdown file. Please check the URL and ensure it provides raw markdown content.\n\nError: ${error.message}`);
+            });
         }
 
         // Get the fileUrl parameter from the URL
